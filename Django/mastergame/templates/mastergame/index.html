@@ -1,9 +1,17 @@
+{% extends "mastergame/layout.html" %}
 {% block body %}
-    <h1>Hello, {{ name }}!</h1>
-    <h1>Time, {{ now }}</h1>
+    
+    {% if user.is_authenticated %}
+        <h1> &nbsp;Welcome, {{ request.user }}</h1>
+    {% else %}
+        <h1> &nbsp;Welcome, Guest</h1>
+    {% endif %}
 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ now }}</h5>
+
+    <main class="container p-5">
     <h2> Add a task</h2>
-    <form action="{% url 'mastergame:index' name %}" method="post">
+    <form action="{% url 'mastergame:add' %}" method="post">
         {% csrf_token %}
         <!-- <input type="text" name="task"> -->
         {{ form }}
@@ -17,6 +25,5 @@
     {% empty %}
         <li>No tasks.</li>
     {% endfor %}
-
-    
+</main>
 {% endblock %}
