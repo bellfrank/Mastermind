@@ -11,4 +11,5 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("add", views.add, name="add"),
+    path("reset", views.reset, name="reset"),
 ]

@@ -1,29 +1,88 @@
 {% extends "mastergame/layout.html" %}
+{% load static %}
+
 {% block body %}
-    
-    {% if user.is_authenticated %}
-        <h1> &nbsp;Welcome, {{ request.user }}</h1>
-    {% else %}
-        <h1> &nbsp;Welcome, Guest</h1>
+    {% if message %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
     {% endif %}
-
-    <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ now }}</h5>
-
+    
+    <h7 id="clock" style="float: right;"></h7>
+    {% if user.is_authenticated %}
+        <h2> &nbsp;Welcome, {{ request.user }}</h2>
+    {% else %}
+        <h2> &nbsp;Welcome, Guest</h2>
+    {% endif %}
     <main class="container p-5">
-    <h2> Add a task</h2>
+    <h2 style="float: right;">Score: {{score}}</h2>
+    <br>
+    <br>
+    <h2 style="float: right;">Timer</h2>
+    <br>
+    <br>
+    <h3 style="float: right;"><span id="timer"></span>s</h3>
+    <br>
+    <br>
+    <br>
+    <h2> Guess the <strong><span style="color: green;">4</span></strong> digit combination</h2>
+    
+    <h5>Attempts remaining: <span style="color: blue">{{attempts}}</span></h5>
+
     <form action="{% url 'mastergame:add' %}" method="post">
         {% csrf_token %}
-        <!-- <input type="text" name="task"> -->
-        {{ form }}
-        <input type="submit">
+        <input class="digits" type="number" id="number1" name="number1" min="0" max="7" required="true" autocomplete="off" autofocus/>
+        <input class="digits" type="number" id="number2" name="number2" min="0" max="7" required="true" autocomplete="off"/>
+        <input class="digits" type="number" id="number3" name="number3" min="0" max="7" required="true" autocomplete="off"/>
+        <input class="digits" type="number" id="number4" name="number4" min="0" max="7" required="true" autocomplete="off"/>
+        <p></p>
+
+        <button id="timer_button" type="submit" class="btn btn-primary" disabled> Submit </button>
     </form>
     
     <p></p>
+    <br>
+    <br>
+    <br>
 
+    <h2>Guess History</h2>
+
+    <form action="{% url 'mastergame:reset' %}" method="post"> 
+        {% csrf_token %}
+        {% if attempts == 10 %}
+        
+            <button type="submit" style="float: right;" disabled>Reset Game</button>
+        {% else %}
+            <button type="submit" class="btn-sm btn-danger" style="float: right;">Reset Game</button>
+        {% endif %}
+    </form>
+    <br><br>
+<table>
+  <tr>
+    <th>Guess Combination</th>
+    <th>Feedback</th>
+    <th>Timer</th>
+  </tr>
     {% for task in tasks %}
-        <li>{{ task }} </li>
+    <tr>
+        <td style="text-align: center;">{{task}}</td>
+        <td>Cool guess?expand a little bit on the growth</td>
+        <td>{{now}}</td>
+    </tr>
     {% empty %}
-        <li>No tasks.</li>
+        <td>No attempts yet.</td>
+        <td>No Feedback available.</td>
+        <td>N/A</td>
     {% endfor %}
+</table>
+    
 </main>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'mastergame/index.js' %}"></script>
 {% endblock %}
