@@ -68,6 +68,7 @@ I keep running into an issue with having the timer reset if the user clicks refr
 
 
 # Big Picture View
+```bash
 ├── manage.py
 ├── Django
 │   ├── settings.py
@@ -93,8 +94,7 @@ I keep running into an issue with having the timer reset if the user clicks refr
 
 
 
-
-Database Schema's and Data: 
+Schemas
 
 Leaderboards
 +----+--------+----------------+
@@ -114,7 +114,7 @@ User
 | 1  | Carter     | pbsdf_HASHED        |
 | 2  | Emma       | psdff_HASHED        |
 +----+------------+---------------------+
-
+```
 
 # Deploying the Site to Heroku
 1. First step is to download the Heroku toolbelt so we can deploy the site on the backend (our terminal)
