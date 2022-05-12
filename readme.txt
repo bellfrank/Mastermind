@@ -2,6 +2,8 @@ one project may have multiple applications, we are going to make a mastergame ap
 django has a urls.py that works for the entire project but we would like one
 for our indivdual app
 
+
+
 installed pytz for pacific time zone
 
 Django uses SQLite, stores as a file
@@ -50,29 +52,53 @@ localStorage.getItem(key) retrieves key
 localStorage.setItem(key, value) replaces existing key to value
 
 
-Overview
+Big Picture View
 ├── manage.py
 ├── Django
-│   ├── __init__.py
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
-├── mastergame      <----- mastergame app
-│   ├── __init__.py
+├── mastergame      <----- MasterGame App
 │   ├── models.py
 │   ├── urls.py
 │   └── views.py
-├── assets     <----- our front-end project source
-│   ├── javascript
-│   └── styles
-├── static     <----- our front-end project outputs (and other Django static files)
+├── helpers.py <----- Helper Functions
+|
+├── static
 │   ├── css
-│   ├── images
 │   └── js  
-└── templates  <----- our Django template files
-    └── myapp
+└── templates  <----- Django Template Files
+│   ├── index.html
+│   ├── layout.html
+│   ├── login.html
+│   └── register.html
+|   └── settings.html
+|
+├── Procfile <--- Heroku Requirement
 
 
+
+
+Database Schema's and Data: 
+
+Leaderboards
++----+--------+----------------+
+| id |  name  |      score     |
++----+--------+----------------+
+| 0  | David  |        1       |
+| 1  | Carter |       20       |
+| 2  | Emma   |       30       |
++----+--------+----------------+
+Notes: id is foreign key to User id
+
+User
++----+------------+---------------------+
+| id |  username  |      password       |
++----+------------+---------------------+
+| 0  | David      | pbkdf_HASHED        |
+| 1  | Carter     | pbsdf_HASHED        |
+| 2  | Emma       | psdff_HASHED        |
++----+------------+---------------------+
 
 
 

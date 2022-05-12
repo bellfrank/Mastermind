@@ -12,4 +12,5 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("add", views.add, name="add"),
     path("reset", views.reset, name="reset"),
+    path("settings", views.settings, name="settings"),
 ]
