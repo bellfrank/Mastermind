@@ -92,10 +92,11 @@ I keep running into an issue with having the timer reset if the user clicks refr
 |
 ├── Procfile <--- Heroku Requirement
 
+```
 
+# Future Database Schemas
 
-Future Database Schemas
-
+```bash
 Leaderboards
 +----+--------+----------------+
 | id |  name  |      score     |
