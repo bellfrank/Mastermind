@@ -103,6 +103,17 @@ def add(request):
         if comb1 == int(numbers[0]) and comb2 == int(numbers[2]) and comb3 == int(numbers[4]) and comb4 == int(numbers[6]):
             guess_message = "Well done! You guessed the correct number :)"
             request.session["score"] += 1
+            request.session["attempts"] = 10
+            request.session["combinations"] = []
+            API_CALL = False
+            
+            return render(request, "mastergame/index.html",{
+            "now": datetime.datetime.now(),
+            "combinations": request.session["combinations"],
+            "attempts": request.session["attempts"],
+            "score": request.session["score"],
+            "guess_message": guess_message,
+        })
 
         elif comb1 == int(numbers[0]) or comb2 == int(numbers[2]) or comb3 == int(numbers[4]) or comb4 == int(numbers[6]):
             guess_message = "You guessed a correct number and its correct location!"
