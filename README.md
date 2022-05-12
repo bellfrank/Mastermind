@@ -142,3 +142,7 @@ So far I haven't really tested a user clicking buttons and making sure the page 
 For this I wanted the ability to have a user play a crazy amount of games and see if the backend could handle that. As I'm writing this, I'm learning about Selenium and how to use a web chrome driver to achieve this.
 
 At the end of the day, a test is as good as how comprehensive it is.
+
+
+# Reflection
+This project gave me an appreciation for all those cool looking websites :) 
