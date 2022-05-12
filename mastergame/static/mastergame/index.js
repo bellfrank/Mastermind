@@ -18,7 +18,8 @@ function timer() {
 }
 
 // Listening to keypresses and restricting UI, try implementing it with forEach! 
-let x = false;
+var x = false;
+
 document.addEventListener('DOMContentLoaded', function(){
 
     document.querySelector('#number1').onkeyup = function() {

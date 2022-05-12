@@ -25,66 +25,46 @@ If you just want to play the game :) Check it out! -> https://fierce-dawn-57055.
 # Step by step process
 
 ## Routes
-views.py contains a number of different views and can be thought of as what the user might like to see. These functions can take in a request and return for example a HttpResponse. We then associate each view with a specific URL in our urls.py. urls.py contains all the possible views that the user may visit on our site.
+views.py contains a number of different views and can be thought of as what the user might like to see. These functions can take in a request and return for example a HttpResponse. We then associate each view with a specific URL in our urls.py. urls.py contains all the possible views that the user may visit on our site. There are different routes the user can go to including the register page, login, leaderboards and settings. 
+
+The main route is the index page which contains the main game. Here the user can try to guess the correct 4 digit number before exhausting the 10 attempts available to them. While there is a lot of client side validation including a feature that auto tabs after a user types in a number of length > 0, I also have server side validation just in case the user is using an outdated browser or something weird happens.
+
+At the very bottom, I've also included a table. The information for this table is generated in the server by storing it in the users sessions.
+
+I use request.session['var_name'] to generate information that can then be filled using the server and extracted client side.
+
+If you take a look at my index function, I've also implemented two pathways, one for a guest user and the other for those logged in users.
 
 ## Forms
 Django has a feature known as Django forms that creates an even easier method of collecting user information. One of the advantages of this feature is that it does client side and server side validation. I decided not to go this route because I wanted the ability to manipulate the DOM using JavaScript and add features like auto tabbing when the user types in a number. For this reason I had to implement my own front and backend validations.
 
-The user can enter 4 digits and those are handled as a form with 4 invidiual inputs. I use this same form to update the webpage with the user's guess history as a post method.
+This brings me to the add function in views.py. This function handles what happens when the user enters 4 digits and is a form with a request of method POST. This function also depends on my global variable API_CALL as a way to check if the RANDOM Numbers API has yet been called. I do this so as to not change the number generated for the current game session. I later implement a feature that resets the API_CALL to false, if the user chooses to reset the game so as to generate a new number.
+
+The most important thing that happens in my add function is checking user input against API number and generating feedback. For this I use several if conditions to check the numbers and generate the appropriate response such as "Well done!" or "Your guess was incorrect :(". 
+
+The final step is to return the gathered information back to the user with a simple return and sending the appropriate message as well. 
 
 ## Sessions
-A problem I ran into while building this application was that the users game session wasn't private. In other words, if you were playing and someone else went to the website at the same time, they would have your current game scores. To solve this I learned about sessions and how they store unique data on the server for each new visit to the website. Django likes to store information regarding sessions in tables and in order to do this you have to do what is known as a migration.
+A problem I ran into while building this application was that the users game session wasn't private. In other words, if you were playing and someone else went to the website at the same time, they would have your current game scores. To solve this I learned about sessions and how they store unique data on the server for each new visit to the website. Django likes to store information regarding sessions in tables and in order to do this you have to do what is known as a migration. We create the migrations on how to manipulate the database by running "python3 manage.py makemigrations" and take those instructions and apply them to the database using "python3 manage.py migrate". 
 
 ## Django Models
 Django provides us with Models that one can think of as a level of abstraction on top of SQL where we don't have to make direct SQL queries ourselves. It's as easy as creating a class with all the data we want to store, for example, a users id as an integer.
 
-Foreign Keys =  means they refer to another object.
-on_delete=models.CASCADE
+This is one feature that I have yet to implement for my project and the idea is to use login feature to record a users score/scores throughout time and update the leaderboards accordingly.
 
 ## Templates
-Django has template inheritance, and I was able to create a layout.html that contains the general structure of my project.
-
+Django has template inheritance, and I was able to create a layout.html that contains the general structure of my project. I also tried to get creating and make my website more appealing by using Bootstrap to generate dynamic messages. 
 
 ## Users
 Django makes it very easy to create a login feature for authenticated users, and provides most of the required documentation in its docs. 
 
-
-create an index on a table to make faster querying, takes time and memory but once it exists
-it makes querying way more efficient
-
-create an index on the passengers last name or first name
+For future use, I'd like to create an index on a table to make faster querying. I am aware that it takes time and memory but once it exists
+it makes querying way more efficient. 
 
 
-in the app inside models.py we can define which models will exist
+## Remaining Bugs
+I keep running into an issue with having the timer reset if the user clicks refresh. I tried to use local storage, such as storing information inside a users webbrowser but it doesn't seem to work. I will try to find a method to perhaps start and stop a timer on the server if necessary.
 
-create the migrations on how to manipulate >> python3 manage.py make migrations
-take those instructions and apply them to the database >> python3 manage.py migrate
-
-look into foreign keys and on_cascade as well as related name 
-from .models import name of models
-
-Did I forget extends layout???
-
-
-admin app, python3 manage.py createsuperuser
-must add models to admin.py
-
-
-
-Authentication
-- for users to login to logout
-- Django has authentication features written already
-
-
-
-Using unittest in python and our Django applications
-only if the test is comprehensive is the test good to an extent
-
-
-Ran into an issue with having a the timer reset if the user clicked refresh
-Solution was to use local storage, storing information inside a users webbrowser
-localStorage.getItem(key) retrieves key
-localStorage.setItem(key, value) replaces existing key to value
 
 
 # Big Picture View
@@ -160,3 +140,5 @@ I ended up using TestCase which is very similar to unittest and wrote a few test
 
 So far I haven't really tested a user clicking buttons and making sure the page is working as it should.
 For this I wanted the ability to have a user play a crazy amount of games and see if the backend could handle that. As I'm writing this, I'm learning about Selenium and how to use a web chrome driver to achieve this.
+
+At the end of the day, a test is as good as how comprehensive it is.

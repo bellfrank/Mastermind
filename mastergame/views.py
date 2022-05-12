@@ -99,7 +99,6 @@ def add(request):
         })
     
         # Checking user input against API number and generates feedback
-        guess_comb = [comb1, comb2, comb3, comb4]
 
         if comb1 == int(numbers[0]) and comb2 == int(numbers[2]) and comb3 == int(numbers[4]) and comb4 == int(numbers[6]):
             guess_message = "Well done! You guessed the correct number :)"
