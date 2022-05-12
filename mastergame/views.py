@@ -10,9 +10,10 @@ from django.core.mail import send_mail
 from django.urls import reverse
 import datetime
 import requests
+import time
 
 # import helper function
-from helpers import numcheck
+from helpers import numcheck, combinations
 
 # import Models
 from .models import User
@@ -26,7 +27,7 @@ DEBUG = True
 
 # Homepage, two pathways, guest and logged in user. Request is an object that gets passed in
 def index(request):
-
+    
     # PATHWAY 1 (GUEST USER)
     if not request.user.is_authenticated:
         # look inside session to see if session variables exist, if not, create one, Django keeps info regarding sessions in tables
@@ -92,30 +93,32 @@ def add(request):
             return render(request, "mastergame/index.html",{
             "now": datetime.datetime.now(),
             "message": "invalid input",
-            "tasks": request.session["combinations"],
+            "combinations": request.session["combinations"],
             "attempts": request.session["attempts"],
             "score": request.session["score"]
         })
     
         # Checking user input against API number and generates feedback
+        guess_comb = [comb1, comb2, comb3, comb4]
+
         if comb1 == int(numbers[0]) and comb2 == int(numbers[2]) and comb3 == int(numbers[4]) and comb4 == int(numbers[6]):
-            guess_message = "Well done! You guessed the correct 4 digit number :)"
+            guess_message = "Well done! You guessed the correct number :)"
             request.session["score"] += 1
 
         elif comb1 == int(numbers[0]) or comb2 == int(numbers[2]) or comb3 == int(numbers[4]) or comb4 == int(numbers[6]):
             guess_message = "You guessed a correct number and its correct location!"
-
+        
         else:
             guess_message = "Your guess was incorrect :("
 
         # Add user guess to history of guesses
-        request.session["combinations"] += [[comb1, comb2, comb3, comb4]]
+        request.session["combinations"] += [f"{comb1}  {comb2}  {comb3}  {comb4} - {guess_message}"]
         request.session["attempts"] -= 1
 
         
         return render(request, "mastergame/index.html",{
             "now": datetime.datetime.now(),
-            "tasks": request.session["combinations"],
+            "combinations": request.session["combinations"],
             "attempts": request.session["attempts"],
             "score": request.session["score"],
             "guess_message": guess_message,
@@ -126,6 +129,9 @@ def add(request):
 
 
 def reset(request):
+    # resets number by allowing API to get called again, once
+    global API_CALL
+    API_CALL = False
     if request.user.is_authenticated:
         request.session["user_combinations"] = []
         request.session["user_attempts"] = 10
@@ -144,6 +150,9 @@ def reset(request):
 
 def settings(request):
     return render(request, "mastergame/settings.html")
+
+def leaderboard(request):
+    return render(request, "mastergame/leaderboards.html")
 
 
 ########################## USER REGISTRATION  ############################################
