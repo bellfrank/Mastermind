@@ -94,7 +94,7 @@ I keep running into an issue with having the timer reset if the user clicks refr
 
 
 
-Schemas
+Future Database Schemas
 
 Leaderboards
 +----+--------+----------------+
