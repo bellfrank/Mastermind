@@ -61,13 +61,43 @@ Django makes it very easy to create a login feature for authenticated users, and
 For future use, I'd like to create an index on a table to make faster querying. I am aware that it takes time and memory but once it exists
 it makes querying way more efficient. 
 
+# Deploying the Site to Heroku
+1. First step is to download the Heroku toolbelt so we can deploy the site on the backend (our terminal)
+Note: Django web server isn't suitable for production so we need to use Gunicorn (install gunicorn)
+2. Django natively uses a SQLite3 database which is not suitable for Heroku
+- pip3 install django-heroku( installs psycopg2, a posgres database which replaces SQLite3)
+- pip3 install python-decouple
+3. Add a file called "Procfile"
+- this file tells heroku what kind of app it is, in our case we write "web: gunicorn"
+4. We also need a requirement.txt to tell Heroku all our requirements
+5. The last step is to tweak some of the settings found in our Django settings.py which can be found in Django's Documentation
+
+
+# Testing and CI/CD
+I wanted to find a method to efficiently and effectively test my code as the project grows. So I began my journey into Test Driven Development.
+
+Python has an assert stament and it turns out that if nothing happens, that's actually a good thing.
+ex: assert square(10) == 100 // if nothing happens thats a good thing 
+
+Using pythons unittest library allows us to really quickly test.
+
+I ended up using TestCase which is very similar to unittest and wrote a few tests to make sure that every route in my page works as intented by simulating a get request and that the status code is the status code that we expect.
+
+So far I haven't really tested a user clicking buttons and making sure the page is working as it should.
+For this I wanted the ability to have a user play a crazy amount of games and see if the backend could handle that. As I'm writing this, I'm learning about Selenium and how to use a web chrome driver to achieve this.
+
+At the end of the day, a test is as good as how comprehensive it is.
+
+
+# Reflection
+This project gave me an appreciation for all those cool looking websites :) 
 
 ## Remaining Bugs
 I keep running into an issue with having the timer reset if the user clicks refresh. I tried to use local storage, such as storing information inside a users webbrowser but it doesn't seem to work. I will try to find a method to perhaps start and stop a timer on the server if necessary.
 
 
 
-# Big Picture View
+# File Overview
 ```bash
 ├── manage.py
 ├── Django
@@ -116,34 +146,3 @@ User
 | 2  | Emma       | psdff_HASHED        |
 +----+------------+---------------------+
 ```
-
-# Deploying the Site to Heroku
-1. First step is to download the Heroku toolbelt so we can deploy the site on the backend (our terminal)
-Note: Django web server isn't suitable for production so we need to use Gunicorn (install gunicorn)
-2. Django natively uses a SQLite3 database which is not suitable for Heroku
-- pip3 install django-heroku( installs psycopg2, a posgres database which replaces SQLite3)
-- pip3 install python-decouple
-3. Add a file called "Procfile"
-- this file tells heroku what kind of app it is, in our case we write "web: gunicorn"
-4. We also need a requirement.txt to tell Heroku all our requirements
-5. The last step is to tweak some of the settings found in our Django settings.py which can be found in Django's Documentation
-
-
-# Testing and CI/CD
-I wanted to find a method to efficiently and effectively test my code as the project grows. So I began my journey into Test Driven Development.
-
-Python has an assert stament and it turns out that if nothing happens, that's actually a good thing.
-ex: assert square(10) == 100 // if nothing happens thats a good thing 
-
-Using pythons unittest library allows us to really quickly test.
-
-I ended up using TestCase which is very similar to unittest and wrote a few tests to make sure that every route in my page works as intented by simulating a get request and that the status code is the status code that we expect.
-
-So far I haven't really tested a user clicking buttons and making sure the page is working as it should.
-For this I wanted the ability to have a user play a crazy amount of games and see if the backend could handle that. As I'm writing this, I'm learning about Selenium and how to use a web chrome driver to achieve this.
-
-At the end of the day, a test is as good as how comprehensive it is.
-
-
-# Reflection
-This project gave me an appreciation for all those cool looking websites :) 
