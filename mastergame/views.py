@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.core.mail import send_mail
 from django.urls import reverse
 import datetime
+from numpy import number
 import requests
 import time
 
@@ -81,12 +82,22 @@ def add(request):
 
     # If user submits 4 digits
     if request.method == "POST":
+        guess_counter = 0
        
         comb1 = int(request.POST["number1"])
         comb2 = int(request.POST["number2"])
         comb3 = int(request.POST["number3"])
         comb4 = int(request.POST["number4"])
         
+        numbers_copy = []
+
+        k = 0
+        for num in numbers:
+            if(num == '\n'):
+                continue
+            numbers_copy.append(int(num))
+            k += 1
+
 
         # Backend 4 digit validation
         if not numcheck(comb1) or not numcheck(comb2) or not numcheck(comb3) or not numcheck(comb4):
@@ -115,10 +126,43 @@ def add(request):
             "guess_message": guess_message,
         })
 
-        elif comb1 == int(numbers[0]) or comb2 == int(numbers[2]) or comb3 == int(numbers[4]) or comb4 == int(numbers[6]):
-            guess_message = "You guessed a correct number and its correct location!"
+        # N numbers correct and the right location
+        flag1 = False
+        flag2 = False
+        flag3 = False
+        flag4 = False
+
+        if(comb1 == int(numbers[0])):
+            guess_counter += 1
+            flag1 = True
+        if(comb2 == int(numbers[2])):
+            guess_counter +=1
+            flag2 = True
+        if(comb3 == int(numbers[4])):
+            guess_counter += 1
+            flag3 = True
+        if(comb4 == int(numbers[6])):
+            guess_counter += 1
+            flag4 = True
         
-        else:
+        
+        # If you guessed correct numbers but in the wrong location
+        # searching the list and if the user's input is in the list
+        guess_counter2 = 0
+        
+        if not flag1 and comb1 in numbers_copy:
+            guess_counter2 += 1
+        if not flag2 and comb2 in numbers_copy:
+            guess_counter2 += 1
+        if not flag3 and comb3 in numbers_copy:
+            guess_counter2 += 1
+        if not flag4 and comb4 in numbers_copy:
+            guess_counter2 += 1
+        
+
+        guess_message = f"You have guessed {guess_counter} numbers correctly and their right location! :)" + f"You also guessed {guess_counter2} numbers correctly but not in their right location!"
+
+        if guess_counter == 0 and guess_counter2 == 0:
             guess_message = "Your guess was incorrect :("
 
         # Add user guess to history of guesses
